@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Database API
+  version: 1.0.0
+paths:
+  /current_state:
+    get:
+      summary: Get current state information
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    device_id:
+                      type: integer
+                    state_id:
+                      type: integer
+                    add_date:
+                      type: string
+                      format: date-time
+                    modification_date:
+                      type: string
+                      format: date-time
+  /devices:
+    get:
+      summary: Get device information
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    type:
+                      type: string
+                    location_id:
+                      type: integer
+                    add_date:
+                      type: string
+                      format: date-time
+                    modification_date:
+                      type: string
+                      format: date-time
+  /locations:
+    get:
+      summary: Get location information
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    address:
+                      type: string
+                    add_date:
+                      type: string
+                      format: date-time
+                    modification_date:
+                      type: string
+                      format: date-time
+  /active_programs:
+    get:
+      summary: Get active program information
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    state:
+                      type: string
+                    program_name:
+                      type: integer
+                    pre_wash:
+                      type: boolean
+                    quick_wash:
+                      type: boolean
+                    dirty_clothes:
+                      type: boolean
+                    add_date:
+                      type: string
+                      format: date-time
+                    modification_date:
+                      type: string
+                      format: date-time
