@@ -5,10 +5,13 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public class Device {
+public class ActiveState {
     private Long id;
-    private String name;
-    private String type;
+    private DeviceState stateName;
+    private DeviceType deviceType;
+    private Long programId;
+    private String details;
+    private Instant endDate;
     private Instant addDate;
     private Instant modificationDate;
 }

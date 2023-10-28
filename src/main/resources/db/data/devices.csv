@@ -1,2 +1,2 @@
-id,name,type,location_id
-1,Electrolux SensiCare 800, electrolux_home, 1
+id,name,model
+1,My home washing machine, Electrolux SensiCare 800

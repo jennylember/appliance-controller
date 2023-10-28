@@ -32,3 +32,66 @@ springdoc:
     docExpansion: none
     operationsSorter: alpha
     tagsSorter: alpha
+
+
+business-properties:
+  programs:
+    - id: 1
+      deviceType: WASHING_MACHINE
+      name: ECO 30
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 2
+      deviceType: WASHING_MACHINE
+      name: ECO 40
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 3
+      deviceType: WASHING_MACHINE
+      name: ECO 60
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 4
+      deviceType: WASHING_MACHINE
+      name: NORMAL 30
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 5
+      deviceType: WASHING_MACHINE
+      name: NORMAL 40
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 6
+      deviceType: WASHING_MACHINE
+      name: NORMAL 60
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 7
+      deviceType: WASHING_MACHINE
+      name: HAND WASH 40
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+    - id: 8
+      deviceType: WASHING_MACHINE
+      name: FUR 30
+      prewashSupported: true
+      quickSupported: false
+      durationMs: 10000
+
+  modelToProgramsMapping:
+    "Electrolux SensiCare 800":
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
