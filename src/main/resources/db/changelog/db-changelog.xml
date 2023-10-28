@@ -3,23 +3,104 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
     <changeSet id="1" author="jennylember">
-        <createTable tableName="users">
-            <column name="id" type="bigint" autoIncrement="true">
+        <createTable tableName="current_state">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="username" type="varchar(255)">
+            <column name="device_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="add_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
-    <changeSet id="2" author="jennylember">
+        <createTable tableName="devices">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="add_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="locations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="add_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="active_programs">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="state" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="program_name" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pre_wash" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="quick_wash" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="dirty_clothes" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="add_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
         <loadData
-                tableName="users"
-                file="classpath:db/data/users.csv"
+                tableName="devices"
+                file="classpath:db/data/devices.csv"
                 separator=","
                 encoding="UTF-8">
             <column name="id" type="bigint"/>
-            <column name="username" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="location_id" type="bigint"/>
+        </loadData>
+        <loadData
+                tableName="locations"
+                file="classpath:db/data/locations.csv"
+                separator=","
+                encoding="UTF-8">
+            <column name="id" type="bigint"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="address" type="text"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>
