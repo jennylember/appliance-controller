@@ -10,9 +10,9 @@ import java.util.List;
 public interface DeviceMapper {
 
     @Select("SELECT * FROM devices WHERE id = #{id}")
-    public Device getDeviceById(long id);
+    Device getDeviceById(long id);
 
-    @Select("SELECT * FROM devices")
-    public List<Device> getAllDevices();
+    @Select("SELECT * FROM devices WHERE 1 = 1")
+    List<Device> getAllDevices();
 
 }

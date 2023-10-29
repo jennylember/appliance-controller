@@ -1,3 +1,7 @@
+logging:
+  level:
+    root: INFO
+
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/postgres
@@ -86,7 +90,7 @@ business-properties:
       durationMs: 10000
 
   modelToProgramsMapping:
-    "Electrolux SensiCare 800":
+    "Electrolux_SensiCare_800":
       - 1
       - 2
       - 3

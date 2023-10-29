@@ -6,12 +6,8 @@ import java.time.Instant;
 
 @Data
 public class ActiveState {
-    private Long id;
-    private DeviceState stateName;
-    private DeviceType deviceType;
-    private Long programId;
-    private String details;
-    private Instant endDate;
+    private Long deviceId;
+    private Long stateId;
     private Instant addDate;
     private Instant modificationDate;
 }

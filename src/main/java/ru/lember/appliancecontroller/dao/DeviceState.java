@@ -1,11 +1,11 @@
 package ru.lember.appliancecontroller.dao;
 
 public enum DeviceState {
-    OFF,
+    NOT_ACTIVE,
     READY,
-    LOADED,
+    CANCELLED,
     WASHING,
-    PAUSE,
+    PAUSED,
     SPINNING,
     DRAINING,
     FINISHED

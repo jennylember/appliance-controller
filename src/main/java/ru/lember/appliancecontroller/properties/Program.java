@@ -8,7 +8,7 @@ public class Program {
     private Long id;
     private DeviceType deviceType;
     private String name;
-    private boolean isPrewashSupported;
+    private boolean isPreWashSupported;
     private boolean isQuickSupported;
     private Long durationMs;
 }

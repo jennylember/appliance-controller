@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
     <changeSet id="1" author="jennylember">
         <createTable tableName="devices">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -20,14 +20,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="current_device_state">
-            <column name="id" type="BIGINT" autoIncrement="true">
+        <createTable tableName="active_state">
+            <column name="device_id" type="BIGSERIAL">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="device_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="state_id" type="BIGINT">
+            <column name="state_id" type="BIGSERIAL">
                 <constraints nullable="false"/>
             </column>
             <column name="add_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
@@ -37,21 +34,19 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="active_states">
-            <column name="id" type="BIGINT" autoIncrement="true">
+        <createTable tableName="states">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="state_name" type="VARCHAR(255)">
+            <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="program_type" type="VARCHAR(255)">
+            <column name="device_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="program_id" type="BIGINT">
-                <constraints nullable="false"/>
             </column>
             <column name="details" type="JSON">
-                <constraints nullable="true"/>
             </column>
             <column name="end_date" type="TIMESTAMP"> </column>
             <column name="add_date" type="TIMESTAMP" defaultValueComputed="current_timestamp">
@@ -66,10 +61,26 @@
                 file="classpath:db/data/devices.csv"
                 separator=","
                 encoding="UTF-8">
-            <column name="id" type="bigint"/>
             <column name="name" type="varchar(255)"/>
             <column name="type" type="varchar(255)"/>
             <column name="location_id" type="bigint"/>
+        </loadData>
+    </changeSet>
+    <changeSet id="2" author="jennylember">
+        <loadData
+                tableName="active_state"
+                file="classpath:db/data/active.csv"
+                separator=","
+                encoding="UTF-8">
+            <column name="state_id" type="bigserial"/>
+        </loadData>
+        <loadData
+                tableName="states"
+                file="classpath:db/data/states.csv"
+                separator=","
+                encoding="UTF-8">
+            <column name="name" type="varchar(255)"/>
+            <column name="device_type" type="varchar(255)"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>

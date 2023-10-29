@@ -1,113 +1,151 @@
 openapi: 3.0.0
 info:
-  title: Database API
+  title: Device Service API
   version: 1.0.0
 paths:
-  /current_state:
+  /api/v1/device/{device_id}:
     get:
-      summary: Get current state information
+      summary: Get Device(s)
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Device ID
+        - name: LEMBER_CORRELATION_ID
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Correlation ID
       responses:
         '200':
-          description: Successful response
+          description: List of Device objects or a single Device
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    device_id:
-                      type: integer
-                    state_id:
-                      type: integer
-                    add_date:
-                      type: string
-                      format: date-time
-                    modification_date:
-                      type: string
-                      format: date-time
-  /devices:
-    get:
-      summary: Get device information
+                oneOf:
+                  - $ref: '#/components/schemas/Device'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Device'
+        '404':
+          description: Device not found
+        '500':
+          description: Internal Server Error
+
+  /api/v1/command:
+    post:
+      summary: Send Command to Device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: integer
+                  description: Device ID
+                targetDeviceState:
+                  $ref: '#/components/schemas/DeviceState'
+                programId:
+                  type: integer
+                  description: Program ID (optional)
+                details:
+                  $ref: '#/components/schemas/Details'
+              required:
+                - deviceId
+                - targetDeviceState
       responses:
         '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-                    type:
-                      type: string
-                    location_id:
-                      type: integer
-                    add_date:
-                      type: string
-                      format: date-time
-                    modification_date:
-                      type: string
-                      format: date-time
-  /locations:
-    get:
-      summary: Get location information
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-                    address:
-                      type: string
-                    add_date:
-                      type: string
-                      format: date-time
-                    modification_date:
-                      type: string
-                      format: date-time
-  /active_programs:
-    get:
-      summary: Get active program information
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    state:
-                      type: string
-                    program_name:
-                      type: integer
-                    pre_wash:
-                      type: boolean
-                    quick_wash:
-                      type: boolean
-                    dirty_clothes:
-                      type: boolean
-                    add_date:
-                      type: string
-                      format: date-time
-                    modification_date:
-                      type: string
-                      format: date-time
+          description: Transition successful
+        '400':
+          description: Bad Request
+        '404':
+          description: Device or Program not found
+        '500':
+          description: Internal Server Error
+
+components:
+  schemas:
+    Device:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+        supportedPrograms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Program'
+        state:
+          $ref: '#/components/schemas/DeviceState'
+        availableCommands:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceState'
+      required:
+        - id
+        - name
+        - type
+        - supportedPrograms
+        - state
+        - availableCommands
+
+    Program:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        deviceType:
+          $ref: '#/components/schemas/DeviceType'
+        prewashSupported:
+          type: boolean
+        quickSupported:
+          type: boolean
+        durationMs:
+          type: integer
+
+      required:
+        - id
+        - name
+        - deviceType
+        - quickSupported
+        - prewashSupported
+        - durationMs
+
+    Details:
+      oneOf:
+        - $ref: '#/components/schemas/WashingDetails'
+
+    WashingDetails:
+      type: object
+      properties:
+        prewash:
+          type: boolean
+        quick:
+          type: boolean
+
+    DeviceType:
+      type: string
+      enum:
+        - WASHING_MACHINE
+
+    DeviceState:
+      type: string
+      enum:
+        - NOT_ACTIVE
+        - READY
+        - CANCELLED
+        - WASHING
+        - PAUSED
+        - SPINNING
+        - DRAINING
+        - FINISHED

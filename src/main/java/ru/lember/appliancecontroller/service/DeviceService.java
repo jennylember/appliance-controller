@@ -1,39 +1,21 @@
 package ru.lember.appliancecontroller.service;
 
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.lember.appliancecontroller.dao.Device;
-import ru.lember.appliancecontroller.mapper.DeviceMapper;
-import ru.lember.appliancecontroller.properties.BusinessProperties;
+import ru.lember.appliancecontroller.api.model.Device;
+import ru.lember.appliancecontroller.api.model.DeviceState;
+import ru.lember.appliancecontroller.api.model.WashingDetails;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Slf4j
-@Service
-public class DeviceService {
+public interface DeviceService {
 
-    private final BusinessProperties properties;
-    private final DeviceMapper deviceMapper;
+    List<Device> getDevices();
+    Device getDevice(Long id);
+    CommandServiceResult command(
+            Long deviceId,
+            DeviceState targetDeviceState,
+            Long programId,
+            WashingDetails details
+    );
 
-    @PostConstruct
-    private void postConstruct() {
-        log.info("initialized. properties: {}", properties);
-    }
-
-    @Autowired
-    public DeviceService(BusinessProperties properties, DeviceMapper deviceMapper) {
-        this.properties = properties;
-        this.deviceMapper = deviceMapper;
-    }
-
-    public Device getDeviceById(long id) {
-        return deviceMapper.getDeviceById(id);
-    }
-
-    public List<Device> getAllDevices() {
-        return deviceMapper.getAllDevices();
-    }
 }

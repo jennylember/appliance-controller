@@ -8,7 +8,7 @@ import java.time.Instant;
 public class Device {
     private Long id;
     private String name;
-    private String type;
+    private String model;
     private Instant addDate;
     private Instant modificationDate;
 }
