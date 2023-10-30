@@ -5,15 +5,14 @@ device and returns the current state of the device.
 
 ## Initial task
 
-The task is to design and implement a backend service to control an appliance such as a wash machine. The API should be REST based and the state of the appliance should be persisted to any form of persistent storage. There is no need for any frontend but we expect there to be a README.md file with build directions and examples of how to invoke the REST API (e.g. curl).
+The task is to design and implement a backend service to control an appliance such as a wash machine. The API should be REST based and the state of the appliance should be persisted to any form of persistent storage. There is no need for any frontend, but we expect there to be a README.md file with build directions and examples of how to invoke the REST API (e.g. curl).
 The project should be implemented using Java (Spring). Feel free to use any 3rd party library that you are comfortable with. Unit tests are expected and the assignment will be assessed based on good programming practices and design.
 
 Please use GitHub or Bitbucket to publish your source code.
 
 ## Solution
 
-### Miro board architecture: 
-https://miro.com/app/board/uXjVNVO4Ieg=/?share_link_id=390335231134
+### Miro board architecture:
 ![img.png](img.png)
 
 Stack:
@@ -45,10 +44,15 @@ In order to run and test the stack, the next things are required:
 1) Send Command to Device - POST /api/v1/command
 
 (replace the placeholders with actual values)
+
 correlationId="your-correlation-id"
+
 deviceId="your-device-id"
+
 targetDeviceState="your-target-device-state"
+
 programId="your-program-id"
+
 details="your-details"
 
 curl -X POST "http://your-api-host/api/v1/command" \
@@ -64,7 +68,9 @@ curl -X POST "http://your-api-host/api/v1/command" \
 2) Get Device (GET /api/v1/device/{deviceId})
 
 (replace the placeholders with actual values)
+
 correlationId="your-correlation-id"
+
 deviceId="your-device-id"
 
 curl -X GET "http://your-api-host/api/v1/device/$deviceId" \
@@ -74,6 +80,7 @@ curl -X GET "http://your-api-host/api/v1/device/$deviceId" \
 3) Get Devices (GET /api/v1/device/)
 
 (replace the placeholders with actual values)
+
 correlationId="your-correlation-id"
 
 curl -X GET "http://your-api-host/api/v1/device/" \
@@ -116,8 +123,6 @@ need to make research.
 2) store passwords in `vault` or at least to use `git-crypt` locally
 3) add authentication to the http controller
 4) review concurrent tables update
-5) add more widgets to grafana, to check `RPS`, `latency`, `errors`
-6) use `MDC` to store correlation_id from the header to get access for it in all logs 
 
 ### Business
 1) extend the DB tables and properties so that different device types are

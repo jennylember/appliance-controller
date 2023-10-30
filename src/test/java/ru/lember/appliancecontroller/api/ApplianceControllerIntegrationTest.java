@@ -142,18 +142,27 @@ public class ApplianceControllerIntegrationTest {
     }
 
     @Test
-    public void testChangeStateWithoutProgramId() {
+    public void testChangeStateToWashingWithoutProgramId() {
         String url = "http://localhost:" + port + "/api/v1/command";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("LEMBER_CORRELATION_ID", TEST_CORRELATION_ID);
 
         CommandRequest request = new CommandRequest(EXISTING_DEVICE_ID, DeviceState.READY, null, DETAILS);
-
         HttpEntity<CommandRequest> requestEntity = new HttpEntity<>(request, headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Void.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        String deviceStateUrl = "http://localhost:" + port + "/api/v1/device/{deviceId}";
+        ResponseEntity<Device> deviceStateResponse = restTemplate.exchange(deviceStateUrl, HttpMethod.GET, requestEntity, Device.class, request.getDeviceId());
+        assertEquals(HttpStatus.OK, deviceStateResponse.getStatusCode());
+        assertNotNull(deviceStateResponse.getBody());
+        assertEquals(DeviceState.READY, deviceStateResponse.getBody().getState());
+
+        CommandRequest request2 = new CommandRequest(EXISTING_DEVICE_ID, DeviceState.WASHING, null, DETAILS);
+        HttpEntity<CommandRequest> requestEntity2 = new HttpEntity<>(request2, headers);
+        ResponseEntity<Void> responseEntity2 = restTemplate.exchange(url, HttpMethod.POST, requestEntity2, Void.class);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity2.getStatusCode());
     }
 
     @Test
@@ -178,7 +187,7 @@ public class ApplianceControllerIntegrationTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("LEMBER_CORRELATION_ID", TEST_CORRELATION_ID);
 
-        CommandRequest request = new CommandRequest(EXISTING_DEVICE_ID, DeviceState.WASHING, EXISTING_PROGRAM_ID, DETAILS);
+        CommandRequest request = new CommandRequest(EXISTING_DEVICE_ID, DeviceState.SPINNING, null, null);
 
         HttpEntity<CommandRequest> requestEntity = new HttpEntity<>(request, headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Void.class);
@@ -252,6 +261,7 @@ public class ApplianceControllerIntegrationTest {
         checkStateTransition(DeviceState.WASHING);
         checkStateTransition(DeviceState.PAUSED);
         checkStateTransition(DeviceState.CANCELLED);
+        checkStateTransition(DeviceState.NOT_ACTIVE);
     }
 
     private void checkStateTransition(DeviceState transitionState) {

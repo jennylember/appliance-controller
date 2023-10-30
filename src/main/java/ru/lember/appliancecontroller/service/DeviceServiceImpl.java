@@ -130,7 +130,7 @@ public class DeviceServiceImpl implements DeviceService {
                 return new CommandServiceResult(false, "Transition from " + activeState + " to " + targetDeviceState + " is not available");
             }
 
-            if (properties.getPrograms().stream().noneMatch(program -> program.getId().equals(programId))) {
+            if (properties.getPrograms().stream().noneMatch(program -> program.getId().equals(programId)) && targetDeviceState.equals(DeviceState.WASHING)) {
                 return new CommandServiceResult(false, "Unsupported program, programId = " + programId);
             }
 
