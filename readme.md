@@ -91,29 +91,15 @@ curl -X GET "http://your-api-host/api/v1/device/" \
 check `.env` file with all passwords and creds 
 (Well, yeah, it's not a good practice to expose such files in the repo. However, I've decided to do it just to simplify the work of the code reviewer)
 
-* visit grafana: http://localhost:3000/ to check the metrics
+* visit grafana: http://localhost:3000/ to check the metrics 
+(prometheus datasource and dashboards should be exported automatically but 
+for some reason you need to edit the dashboard and update something in order to start see the data from prometheus)
+
+![img_2.png](img_2.png)
 
 * visit prometheus: http://localhost:9090/ to check the targets
 
 * visit pgadmin: http://localhost:5050/ to check the DB state
-
-## How did I setup Grafana?
-
-I took a common image `grafana/grafana`, setup data source as prometheus
-manually, then set up a dashboard with 2 widgets, displaying
-`command` and `device` requests rate.
-
-After that I stopped a container, did a commit
-`docker commit your_existing_grafana_container jennylember-grafana-for-appliance-controller:latest`
-
-then tagged:
-`docker tag jennylember-grafana-for-appliance-controller:latest jennylember/jennylember-grafana-for-appliance-controller:latest`
-
-and pushed to my own dockehub (https://hub.docker.com/u/jennylember):
-`docker push jennylember/jennylember-grafana-for-appliance-controller`
-
-Maybe there is a better way how to do this setup in a declarative way with a config file,
-need to make research.
 
 ## Further improvements
 

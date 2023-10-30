@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - appliance_postgres_data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
@@ -17,29 +17,44 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
+    volumes:
+      - appliance_pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres
 
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
     ports:
       - 9090:9090
     volumes:
       - ./prometheus:/prometheus
     command:
       - '--config.file=/prometheus/prometheus.yml'
+    depends_on:
+      - appliance-controller
 
   grafana:
-    image: jennylember/jennylember-grafana-for-appliance-controller
-    container_name: grafana
+    image: grafana/grafana
     ports:
       - 3000:3000
     volumes:
-      - ./grafana:/var/lib/grafana
+      - appliance_grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/datasources/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./grafana/provisioning/dashboards/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./grafana/provisioning/dashboards/appliance_dashboard.json:/var/lib/grafana/dashboards/appliance_dashboard.json
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_DEFAULT_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_DEFAULT_PASSWORD}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_AUTH_ANONYMOUS_ENABLED="true"
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_BASIC_ENABLED="false"
+      - GF_USERS_AUTO_ASSIGN_ORG_ROLE=Admin
+      - GF_DASHBOARDS_JSON_ENABLED="true"
+      - GF_DASHBOARDS_JSON_PATH=/var/lib/grafana/dashboards
+      - GF_DASHBOARD_PROVISIONING_PATH=/etc/grafana/provisioning/dashboards
+    depends_on:
+      - prometheus
 
   appliance-controller:
     build:
@@ -52,10 +67,10 @@ services:
       - "8081:8081"
     depends_on:
       - postgres
-      - pgadmin
 
 volumes:
-  postgres_data:
-  pgadmin_data:
-  grafana_data:
-  prometheus_data:
+  appliance_postgres_data:
+  appliance_pgadmin_data:
+  appliance_grafana_data:
+
+
